@@ -3,13 +3,13 @@ module "lambda_function" {
 
   function_name = "AWS-TO-CLACK"
   description   = "AWS to slack Noti"
-  handler       = "index.lambda_handler"
+  handler       = "lambda_function.lambda_handler"
   runtime       = "python3.8"
 
   source_path = "./src/lambda-function"
   environment_variables = {
-    HOOK_URL = "https://hooks.slack.com/services/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"
-    SLACK_CHANNEL = "테스트"
+    HOOK_URL = ""
+    SLACK_CHANNEL = ""
   }
 
   tags = {
@@ -26,6 +26,41 @@ resource "aws_sns_topic_subscription" "ec2_updates_target" {
   protocol  = "lambda"
   endpoint  = module.lambda_function.lambda_function_arn
 }
+
+resource "aws_sns_topic_policy" "default" {
+  arn = aws_sns_topic.ec2_updates.arn
+  policy = data.aws_iam_policy_document.sns_topic_policy.json
+}
+
+data "aws_iam_policy_document" "sns_topic_policy" {
+  policy_id = "__default_policy_ID"
+
+  statement {
+    actions = [
+        "SNS:GetTopicAttributes",
+        "SNS:SetTopicAttributes",
+        "SNS:AddPermission",
+        "SNS:RemovePermission",
+        "SNS:DeleteTopic",
+        "SNS:Subscribe",
+        "SNS:ListSubscriptionsByTopic",
+        "SNS:Publish"
+    ]
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["events.amazonaws.com"]
+    }
+
+    resources = [
+      aws_sns_topic.ec2_updates.arn,
+    ]
+
+    sid = "__default_statement_ID"
+  }
+}
+
 
 module "eventbridge" {
   source = "terraform-aws-modules/eventbridge/aws"
