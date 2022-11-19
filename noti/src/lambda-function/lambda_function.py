@@ -29,7 +29,6 @@ def send_message(message):
 
    
 def lambda_handler(event, context):
-    
     iam_event = json.loads(event.get('Records')[0].get('Sns').get('Message'))
     
     logger.info("Event        : " + str(event))
@@ -64,7 +63,7 @@ def lambda_handler(event, context):
     current_event = ""
     
     for key, value in event_request_parameters.items():
-        current_event += f"{key} : {value}\\n"
+        current_event += f"{key} : {value}\n"
     
     
     logger.info("SLACK Channel: " + SLACK_CHANNEL)
@@ -86,7 +85,7 @@ def lambda_handler(event, context):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": '*'+ changed_resource + ' 변경 사항이 감지되었습니다.*\\n\\n*Request Parameters*'
+                    "text": '*'+ changed_resource + ' 변경 사항이 감지되었습니다.*\n\n*Request Parameters*'
                 }
             },
             # {"type": "divider"},
@@ -94,7 +93,7 @@ def lambda_handler(event, context):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": current_event + '\\n'
+                    "text": current_event + '\n'
                 }
             },
             {"type": "divider"}
@@ -108,23 +107,23 @@ def lambda_handler(event, context):
                 "fields": [
                     {
                         "type": "mrkdwn",
-                        "text": '*행위 주체*\\n' + user_name
+                        "text": '*행위 주체*\n' + user_name
                     },
                     {
                         "type": "mrkdwn",
-                        "text": '*소스 IP*\\n' + source_ip + ' (<https://ko.infobyip.com/ip-' + source_ip + '.html|*IP 위치 조회*>)'
+                        "text": '*소스 IP*\n' + source_ip + ' (<https://ko.infobyip.com/ip-' + source_ip + '.html|*IP 위치 조회*>)'
                     },
                     {
                         "type": "mrkdwn",
-                        "text": '*이벤트 시간 (UTC)*\\n' + event_time
+                        "text": '*이벤트 시간 (UTC)*\n' + event_time
                     },
                     {
                         "type": "mrkdwn",
-                        "text": '*이벤트 이름*\\n' + event_name
+                        "text": '*이벤트 이름*\n' + event_name
                     },
                     {
                         "type": "mrkdwn",
-                        "text": '*이벤트 리전*\\n' + aws_region
+                        "text": '*이벤트 리전*\n' + aws_region
                     }
                 ]
             },
