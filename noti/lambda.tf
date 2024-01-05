@@ -8,7 +8,7 @@ module "lambda_function" {
   
 source_path = "./src/lambda-function"
   environment_variables = {
-    HOOK_URL = "https://hooks.slack.com/services/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"
+    HOOK_URL = "https://hooks.slack.com/services/T04BD2YD327/B04BLNBA4MT/"
     SLACK_CHANNEL = "test"
   }
 
